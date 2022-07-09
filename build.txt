@@ -1,0 +1,4 @@
+displayName = Archipelago Terraria Randomizer
+author = Whoneedspacee
+version = 0.1
+dllReferences = Archipelago.MultiClient.Net, websocket-sharp, Newtonsoft.Json
