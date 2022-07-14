@@ -16,6 +16,8 @@ using Archipelago.MultiClient.Net.Helpers;
 using Newtonsoft.Json.Linq;
 using Terraria.Localization;
 using Terraria.Achievements;
+using Archipelago.Items;
+using Archipelago.Achievements;
 
 namespace Archipelago
 {
@@ -46,7 +48,7 @@ namespace Archipelago
         public static void OnWorldLoaded(On.Terraria.WorldGen.Hooks.orig_WorldLoaded orig)
         {
             orig();
-            AchievementManager.Load();
+            Achievements.AchievementManager.Load();
             ItemManager.Load();
         }
 
@@ -54,48 +56,9 @@ namespace Archipelago
         public static void OnSaveAndQuit(On.Terraria.WorldGen.orig_SaveAndQuit orig, Action callback)
         {
             orig(callback);
-            AchievementManager.Unload();
+            Achievements.AchievementManager.Unload();
             ItemManager.Unload();
-            DisconnectFromServer();
-        }
-
-        public static void ConnectToServer(string input, string[] args)
-        {
-            if(args.Length != 3)
-            {
-                Main.NewText("Invalid Arguments.");
-                return;
-            }
-            if (session != null && session.Socket.Connected)
-            {
-                Main.NewText("Already Connected to Archipelago Server.");
-                return;
-            }
-            int port = Int32.Parse(args[2]);
-            session = ArchipelagoSessionFactory.CreateSession(args[1], port);
-            LoginResult result = session.TryConnectAndLogin("Terraria", args[0], new Version(0, 3, 2), ItemsHandlingFlags.NoItems, null, null, null);
-            if (!result.Successful)
-            {
-                Main.NewText(result.ToString());
-                return;
-            }
-            On.Terraria.Chat.ChatCommandProcessor.ProcessIncomingMessage += OnTerrariaChatMessage;
-            session.Socket.PacketReceived += OnPacketReceived;
-            AchievementManager.CompleteLocationChecks();
-            Main.NewText("Connected to Archipelago server.");
-        }
-
-        public static void DisconnectFromServer()
-        {
-            if (session == null || !session.Socket.Connected)
-            {
-                Main.NewText("Not Currently Connected to Archipelago Server.");
-                return;
-            }
-            On.Terraria.Chat.ChatCommandProcessor.ProcessIncomingMessage -= OnTerrariaChatMessage;
-            session.Socket.PacketReceived -= OnPacketReceived;
-            session.Socket.Disconnect();
-            Main.NewText("Disconnected from the Archipelago server.");
+            Commands.DisconnectCommand.Disconnect();
         }
 
         // Checks for player sent messages
@@ -124,19 +87,32 @@ namespace Archipelago
             }
             if (type == ArchipelagoPacketType.PrintJSON)
             {
-                ItemPrintJsonPacket received = (ItemPrintJsonPacket)packet;
+                /*ItemPrintJsonPacket received = (ItemPrintJsonPacket)packet;
                 int playerid = Int32.Parse(received.Data[0].Text);
                 long itemid = Int64.Parse(received.Data[2].Text);
                 long locationid = Int64.Parse(received.Data[4].Text);
                 Main.NewText(session.Players.GetPlayerAlias(playerid) + received.Data[1].Text +
                     session.Items.GetItemName(itemid) + received.Data[3].Text + 
-                    session.Locations.GetLocationNameFromId(locationid) + received.Data[5].Text);
-                if(session.ConnectionInfo.Slot != received.ReceivingPlayer)
-                {
-                    return;
-                }
-                int archipelago_item_id = received.Item.Item;
-                ItemManager.ArchipelagoItemReceived(archipelago_item_id);
+                    session.Locations.GetLocationNameFromId(locationid) + received.Data[5].Text);*/
+                return;
+            }
+            if(type == ArchipelagoPacketType.ReceivedItems)
+            {
+                ReceivedItemsPacket received = (ReceivedItemsPacket)packet;
+                return;
+            }
+            // This packet comes first when connecting, do not put any terraria main thread actions here such as NewText
+            // The Connected packet will stop the main thread from sleeping, so if you put any actions here that can only be done
+            // On the main thread, then the game will be slept until the login result times out
+            if(type == ArchipelagoPacketType.RoomInfo)
+            {
+                RoomInfoPacket received = (RoomInfoPacket)packet;
+                return;
+            }
+            if (type == ArchipelagoPacketType.Connected)
+            {
+                ConnectedPacket received = (ConnectedPacket)packet;
+                Achievements.AchievementManager.CompleteLocationChecks();
                 return;
             }
             Main.NewText("Recieved Unchecked packet type: " + type);

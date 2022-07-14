@@ -18,39 +18,41 @@ using Terraria.Achievements;
 using Terraria.GameContent.Achievements;
 using Terraria.Localization;
 
-namespace Archipelago
+namespace Archipelago.Items
 {
     public static class ItemManager
     {
-
+        // Progression Condition
         public static int crafting_progression = 0;
 
+        // Progressive Items
         public static int PROGRESSIVE_CRAFTING_ITEM = 22000;
-        public static int MOB_TRAP_ITEM = 22200;
-        public static int BOULDER_TRAP_ITEM = 22201;
-        public static int LAVA_TRAP_ITEM = 22202;
-        public static int ICE_TRAP_ITEM = 22203;
-        public static int GRAVITY_FLIP_TRAP_ITEM = 22204;
-        public static int BLOOD_MOON_TRAP_ITEM = 22205;
-        public static Dictionary<int, short> items_by_id = new Dictionary<int, short>();
+        public static int LIFE_CRYSTAL_ITEM = 22001;
+        public static int MANA_CRYSTAL_ITEM = 22002;
+
+        // Trap Items
+        public static int MOB_TRAP_ITEM = 22100;
+        public static int BOULDER_TRAP_ITEM = 22101;
+        public static int LAVA_TRAP_ITEM = 22102;
+        public static int ICE_TRAP_ITEM = 22103;
+        public static int GRAVITY_FLIP_TRAP_ITEM = 22104;
+        public static int BLOOD_MOON_TRAP_ITEM = 22105;
+
+        // Misc Items
+        public static int MONEY_BAG_ITEM = 22200;
+        public static int POTION_BAG_ITEM = 22201;
+        public static int SOUL_BAG_ITEM = 22202;
+        public static int CRATE_BAG_ITEM = 22203;
+        public static int BAR_BAG_ITEM = 22204;
+        public static int SPAWNER_BAG_ITEM = 22205;
+
+        // Lookup Tables
         public static string[] crafting_progression_string = { "Copper" , "Iron", "Silver", "Gold", "Shadow", "Molten",
             "Cobalt", "Mythril", "Adamantite", "Hallowed", "Chlorophyte", "Lunar"};
 
         public static void Load()
         {
-            items_by_id.Add(22101, ItemID.WoodenCrate);
-            items_by_id.Add(22102, ItemID.IronCrate);
-            items_by_id.Add(22103, ItemID.GoldenCrate);
-            items_by_id.Add(22104, ItemID.JungleFishingCrate);
-            items_by_id.Add(22105, ItemID.FloatingIslandFishingCrate);
-            items_by_id.Add(22106, ItemID.CorruptFishingCrate);
-            items_by_id.Add(22107, ItemID.CrimsonFishingCrate);
-            items_by_id.Add(22108, ItemID.HallowedFishingCrate);
-            items_by_id.Add(22109, ItemID.DungeonFishingCrate);
-            items_by_id.Add(22110, ItemID.FrozenCrate);
-            items_by_id.Add(22111, ItemID.OasisCrate);
-            items_by_id.Add(22112, ItemID.LavaCrate);
-            items_by_id.Add(22113, ItemID.OceanCrate);
+
         }
 
         public static void Unload()
@@ -58,13 +60,33 @@ namespace Archipelago
 
         }
 
+        public static void OnItemReceived(ReceivedItemsHelper helper)
+        {
+            NetworkItem item = helper.DequeueItem();
+
+            Main.NewText("You Received " + ArchipelagoTerraria.session.Items.GetItemName(item.Item) +
+
+                " from " + ArchipelagoTerraria.session.Players.GetPlayerAlias(item.Player) +
+                " (" + ArchipelagoTerraria.session.Locations.GetLocationNameFromId(item.Location) + ")");
+
+            ArchipelagoItemReceived(item.Item);
+        }
+
         public static void ArchipelagoItemReceived(int archipelago_item_id)
         {
-            // Crafting Progression
+            // Progressive Items
             if (archipelago_item_id == PROGRESSIVE_CRAFTING_ITEM)
             {
                 crafting_progression++;
                 Main.NewText("Crafting Progression Upgraded to Tier " + crafting_progression_string[crafting_progression - 1]);
+                return;
+            }
+            if (archipelago_item_id == LIFE_CRYSTAL_ITEM)
+            {
+                return;
+            }
+            if (archipelago_item_id == MANA_CRYSTAL_ITEM)
+            {
                 return;
             }
             // Traps
@@ -134,24 +156,56 @@ namespace Archipelago
                 Main.NewText("Blood Moon Trap Activated");
                 return;
             }
-            // Generic Items
-            short terraria_item_id;
-            bool gotten;
-            gotten = items_by_id.TryGetValue(archipelago_item_id, out terraria_item_id);
-            if (!gotten)
+            // Misc Items
+            if (archipelago_item_id == MONEY_BAG_ITEM)
             {
-                Main.NewText("Unknown Item Received With Archipelago Id: " + archipelago_item_id);
+                foreach(Player player in Main.player)
+                {
+                    player.QuickSpawnItem(null, ModContent.ItemType<MoneyBag>(), 1);
+                }
                 return;
             }
-            foreach (Player player in Main.player)
+            if (archipelago_item_id == POTION_BAG_ITEM)
             {
-                if (!player.active)
-                    continue;
-                player.QuickSpawnItem(null, terraria_item_id, 1);
-                Item item = new Item(terraria_item_id);
-                Main.NewText(player.name + " Received Item: " + item.Name);
+                foreach (Player player in Main.player)
+                {
+                    player.QuickSpawnItem(null, ModContent.ItemType<PotionBag>(), 1);
+                }
+                return;
             }
-            return;
+            if (archipelago_item_id == SOUL_BAG_ITEM)
+            {
+                foreach (Player player in Main.player)
+                {
+                    player.QuickSpawnItem(null, ModContent.ItemType<SoulBag>(), 1);
+                }
+                return;
+            }
+            if (archipelago_item_id == CRATE_BAG_ITEM)
+            {
+                foreach (Player player in Main.player)
+                {
+                    player.QuickSpawnItem(null, ModContent.ItemType<CrateBag>(), 1);
+                }
+                return;
+            }
+            if (archipelago_item_id == BAR_BAG_ITEM)
+            {
+                foreach (Player player in Main.player)
+                {
+                    player.QuickSpawnItem(null, ModContent.ItemType<BarBag>(), 1);
+                }
+                return;
+            }
+            if (archipelago_item_id == SPAWNER_BAG_ITEM)
+            {
+                foreach (Player player in Main.player)
+                {
+                    player.QuickSpawnItem(null, ModContent.ItemType<SpawnerBag>(), 1);
+                }
+                return;
+            }
+            Main.NewText("Unknown Item Received: " + archipelago_item_id);
         }
 
         public static void PostAddRecipes()

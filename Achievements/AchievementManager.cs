@@ -17,7 +17,7 @@ using Newtonsoft.Json.Linq;
 using Terraria.Achievements;
 using Terraria.GameContent.Achievements;
 
-namespace Archipelago
+namespace Archipelago.Achievements
 {
     public static class AchievementManager
     {

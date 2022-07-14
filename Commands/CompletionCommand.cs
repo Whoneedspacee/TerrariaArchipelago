@@ -14,19 +14,20 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Text;
 using Terraria.ID;
+using Archipelago.Achievements;
 
 namespace Archipelago.Commands
 {
-	public class CheckCompletionCommand : ModCommand
+	public class CompletionCommand : ModCommand
 	{
 		public override CommandType Type
 			=> CommandType.Chat;
 
 		public override string Command
-			=> "checkcompletion";
+			=> "completion";
 
 		public override string Description
-			=> "/checkcompletion amount";
+			=> "/completion amount";
 
 		public override void Action(CommandCaller caller, string input, string[] args)
 		{
@@ -41,13 +42,13 @@ namespace Archipelago.Commands
 				Main.NewText("Please insert a number for the amount.");
             }
 			Main.NewText("Achievements Not Yet Completed: ");
-			foreach(Achievement achievement in AchievementManager.achievements.Keys)
+			foreach(Achievement achievement in Achievements.AchievementManager.achievements.Keys)
             {
 				if(amount <= 0)
                 {
 					return;
                 }
-				if (AchievementManager.achievements_completed.Contains(achievement))
+				if (Achievements.AchievementManager.achievements_completed.Contains(achievement))
 				{
 					continue;
 				}

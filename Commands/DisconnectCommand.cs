@@ -30,7 +30,22 @@ namespace Archipelago.Commands
 
 		public override void Action(CommandCaller caller, string input, string[] args)
 		{
-			ArchipelagoTerraria.DisconnectFromServer();
+			Disconnect();
+		}
+
+		public static void Disconnect()
+        {
+			if (ArchipelagoTerraria.session == null || !ArchipelagoTerraria.session.Socket.Connected)
+			{
+				Main.NewText("Not Currently Connected to Archipelago Server.");
+				return;
+			}
+			On.Terraria.Chat.ChatCommandProcessor.ProcessIncomingMessage -= ArchipelagoTerraria.OnTerrariaChatMessage;
+			ArchipelagoTerraria.session.Socket.PacketReceived -= ArchipelagoTerraria.OnPacketReceived;
+			ArchipelagoTerraria.session.Items.ItemReceived -= Items.ItemManager.OnItemReceived;
+			ArchipelagoTerraria.session.Socket.Disconnect();
+			ArchipelagoTerraria.session = null;
+			Main.NewText("Disconnected from the Archipelago server.");
 		}
 	}
 }
