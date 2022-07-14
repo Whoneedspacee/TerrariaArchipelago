@@ -102,12 +102,8 @@ namespace Archipelago.Achievements
                 // Game Completion Check
                 if (achievements_by_id[achievement] == 0)
                 {
-                    // Complete All Achievements
-                    foreach (int id in achievements_by_id.Values)
-                    {
-                        ArchipelagoTerraria.session.Locations.CompleteLocationChecks(id);
-                    }
-                    return;
+                    // Goal State
+                    ArchipelagoTerraria.session.Socket.SendPacket(new StatusUpdatePacket { Status = ArchipelagoClientState.ClientGoal });
                 }
                 ArchipelagoTerraria.session.Locations.CompleteLocationChecks(achievements_by_id[achievement]);
             }
