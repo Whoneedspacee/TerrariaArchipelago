@@ -11,6 +11,15 @@ namespace Archipelago.Items
 	{
 		public override string Texture => "Terraria/Images/Item_" + ItemID.FishronBossBag;
 
+		public static short[] crateItems = {
+			ItemID.WoodenCrate, ItemID.IronCrate, ItemID.GoldenCrate, ItemID.JungleFishingCrate, ItemID.FloatingIslandFishingCrate, 
+			ItemID.CorruptFishingCrate,ItemID.CrimsonFishingCrate, ItemID.HallowedFishingCrate, ItemID.DungeonFishingCrate, ItemID.FrozenCrate, 
+			ItemID.OasisCrate, ItemID.LavaCrate, ItemID.OceanCrate, ItemID.WoodenCrateHard, ItemID.IronCrateHard, ItemID.GoldenCrateHard,
+			ItemID.JungleFishingCrateHard, ItemID.FloatingIslandFishingCrateHard, ItemID.CorruptFishingCrateHard, ItemID.CrimsonFishingCrateHard,
+			ItemID.HallowedFishingCrateHard, ItemID.DungeonFishingCrateHard, ItemID.FrozenCrateHard, ItemID.OasisCrateHard,
+			ItemID.LavaCrateHard, ItemID.OceanCrateHard,
+		};
+
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Crate Loot Bag");
@@ -34,7 +43,9 @@ namespace Archipelago.Items
 		public override void RightClick(Player player)
 		{
 			var source = player.GetSource_OpenItem(Type);
-			player.QuickSpawnItem(source, ItemID.PlatinumCoin, 5);
+			player.QuickSpawnItem(source, crateItems[Main.rand.Next(1, crateItems.Length)], 5);
+			player.QuickSpawnItem(source, crateItems[Main.rand.Next(1, crateItems.Length)], 3);
+			player.QuickSpawnItem(source, crateItems[Main.rand.Next(1, crateItems.Length)], 1);
 		}
 
 		public override Color? GetAlpha(Color lightColor)

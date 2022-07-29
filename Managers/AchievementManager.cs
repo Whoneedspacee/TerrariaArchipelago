@@ -17,7 +17,7 @@ using Newtonsoft.Json.Linq;
 using Terraria.Achievements;
 using Terraria.GameContent.Achievements;
 
-namespace Archipelago.Achievements
+namespace Archipelago.Managers
 {
     public static class AchievementManager
     {
@@ -104,6 +104,7 @@ namespace Archipelago.Achievements
                 {
                     // Goal State
                     ArchipelagoTerraria.session.Socket.SendPacket(new StatusUpdatePacket { Status = ArchipelagoClientState.ClientGoal });
+                    return;
                 }
                 ArchipelagoTerraria.session.Locations.CompleteLocationChecks(achievements_by_id[achievement]);
             }

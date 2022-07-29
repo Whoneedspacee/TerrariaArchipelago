@@ -7,14 +7,14 @@ using Terraria.ModLoader;
 
 namespace Archipelago.Items
 {
-	public class PotionBag : ModItem
+	public class ReagentBag : ModItem
 	{
 		public override string Texture => "Terraria/Images/Item_" + ItemID.BossBagDarkMage;
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Potion Loot Bag");
-			Tooltip.SetDefault("{$CommonItemTooltip.RightClickToOpen}\nPotion Bag");
+			DisplayName.SetDefault("Reagent Loot Bag");
+			Tooltip.SetDefault("{$CommonItemTooltip.RightClickToOpen}\nReagent Bag");
 		}
 
 		public override void SetDefaults()
@@ -34,7 +34,28 @@ namespace Archipelago.Items
 		public override void RightClick(Player player)
 		{
 			var source = player.GetSource_OpenItem(Type);
-			
+			player.QuickSpawnItem(source, ItemID.BottledWater, 10);
+			player.QuickSpawnItem(source, ItemID.Mushroom, 10);
+			player.QuickSpawnItem(source, ItemID.GlowingMushroom, 10);
+			player.QuickSpawnItem(source, ItemID.Daybloom, 10);
+			player.QuickSpawnItem(source, ItemID.Moonglow, 10);
+			player.QuickSpawnItem(source, ItemID.Deathweed, 10);
+			player.QuickSpawnItem(source, ItemID.Blinkroot, 10);
+			player.QuickSpawnItem(source, ItemID.Shiverthorn, 10);
+			player.QuickSpawnItem(source, ItemID.Fireblossom, 10);
+			player.QuickSpawnItem(source, ItemID.Waterleaf, 10);
+			player.QuickSpawnItem(source, ItemID.RottenChunk, 5);
+			player.QuickSpawnItem(source, ItemID.Lens, 5);
+			player.QuickSpawnItem(source, ItemID.SharkFin, 5);
+			player.QuickSpawnItem(source, ItemID.Feather, 5);
+			player.QuickSpawnItem(source, ItemID.IronOre, 5);
+			player.QuickSpawnItem(source, ItemID.GoldOre, 5);
+			player.QuickSpawnItem(source, ItemID.Obsidian, 5);
+			player.QuickSpawnItem(source, ItemID.ArmoredCavefish, 3);
+			player.QuickSpawnItem(source, ItemID.Prismite, 3);
+			player.QuickSpawnItem(source, ItemID.VariegatedLardfish, 3);
+			player.QuickSpawnItem(source, ItemID.Hemopiranha, 3);
+			player.QuickSpawnItem(source, ItemID.Ebonkoi, 3);
 		}
 
 		public override Color? GetAlpha(Color lightColor)

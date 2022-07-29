@@ -53,7 +53,7 @@ namespace Archipelago.Commands
             ArchipelagoTerraria.session = ArchipelagoSessionFactory.CreateSession(args[1], port);
             // Session Event Handlers
             ArchipelagoTerraria.session.Socket.PacketReceived += ArchipelagoTerraria.OnPacketReceived;
-            ArchipelagoTerraria.session.Items.ItemReceived += Items.ItemManager.OnItemReceived;
+            ArchipelagoTerraria.session.Items.ItemReceived += Managers.ItemManager.OnItemReceived;
             // This will sleep the terraria main thread, so do not call any functions like NewText during this expecting them to work
             // It will simply stall until the login result times out, and then the connected packet will be received
             // After the login result already timed out, meaning you will get no login result but be connected

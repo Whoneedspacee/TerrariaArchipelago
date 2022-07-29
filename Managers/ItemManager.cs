@@ -18,7 +18,7 @@ using Terraria.Achievements;
 using Terraria.GameContent.Achievements;
 using Terraria.Localization;
 
-namespace Archipelago.Items
+namespace Archipelago.Managers
 {
     public static class ItemManager
     {
@@ -40,11 +40,12 @@ namespace Archipelago.Items
 
         // Misc Items
         public static int MONEY_BAG_ITEM = 22200;
-        public static int POTION_BAG_ITEM = 22201;
+        public static int REAGENT_BAG_ITEM = 22201;
         public static int SOUL_BAG_ITEM = 22202;
         public static int CRATE_BAG_ITEM = 22203;
         public static int BAR_BAG_ITEM = 22204;
         public static int SPAWNER_BAG_ITEM = 22205;
+        public static int MOUNT_BAG_ITEM = 22206;
 
         // Lookup Tables
         public static string[] crafting_progression_string = { "Copper" , "Iron", "Silver", "Gold", "Shadow", "Molten",
@@ -96,10 +97,9 @@ namespace Archipelago.Items
                 {
                     if (!player.active)
                         continue;
-                    player.TeleportationPotion();
-                    Main.NewText(player.name + " Was Randomly Teleported.");
+                    for(int i = 0; i < 10; i++)
+                        NPC.SpawnOnPlayer(player.whoAmI, NPCID.Bee);
                 }
-                Main.NewText("Random Teleportation Trap Activated.");
                 return;
             }
             else if (archipelago_item_id == BOULDER_TRAP_ITEM)
@@ -108,10 +108,9 @@ namespace Archipelago.Items
                 {
                     if (!player.active)
                         continue;
-                    NPC.SpawnOnPlayer(player.whoAmI, NPCID.QueenBee);
-                    Main.NewText(player.name + " Got Fucked.");
+                    for(int i = 0; i < 3; i++)
+                        Projectile.NewProjectile(null, player.position + new Vector2(0, 10), new Vector2(Main.rand.Next(-20, 20), 100), 0, 100, 10f);
                 }
-                Main.NewText("Queen Bee Trap Activated.");
                 return;
             }
             else if (archipelago_item_id == LAVA_TRAP_ITEM)
@@ -120,10 +119,9 @@ namespace Archipelago.Items
                 {
                     if (!player.active)
                         continue;
-                    NPC.SpawnWOF(new Vector2(0, 0));
-                    Main.NewText(player.name + " Got Fucked.");
+                    for(int i = 0; i < 3; i++)
+                        NPC.SpawnOnPlayer(player.whoAmI, NPCID.LavaSlime);
                 }
-                Main.NewText("WoF Trap Activated");
                 return;
             }
             else if (archipelago_item_id == ICE_TRAP_ITEM)
@@ -133,9 +131,7 @@ namespace Archipelago.Items
                     if (!player.active)
                         continue;
                     player.AddBuff(BuffID.Frozen, 5 * 60);
-                    Main.NewText(player.name + " Was Ice Trapped");
                 }
-                Main.NewText("Ice Trap Activated");
                 return;
             }
             else if (archipelago_item_id == GRAVITY_FLIP_TRAP_ITEM)
@@ -145,15 +141,14 @@ namespace Archipelago.Items
                     if (!player.active)
                         continue;
                     player.AddBuff(BuffID.VortexDebuff, 30 * 60);
-                    Main.NewText(player.name + " Was Gravity Trapped");
                 }
-                Main.NewText("Gravity Trap Activated");
                 return;
             }
             else if (archipelago_item_id == BLOOD_MOON_TRAP_ITEM)
             {
+                Main.dayTime = false;
+                Main.time = 4 * 3600 + 30 * 60;
                 Main.bloodMoon = true;
-                Main.NewText("Blood Moon Trap Activated");
                 return;
             }
             // Misc Items
@@ -161,15 +156,15 @@ namespace Archipelago.Items
             {
                 foreach(Player player in Main.player)
                 {
-                    player.QuickSpawnItem(null, ModContent.ItemType<MoneyBag>(), 1);
+                    player.QuickSpawnItem(null, ModContent.ItemType<Items.MoneyBag>(), 1);
                 }
                 return;
             }
-            if (archipelago_item_id == POTION_BAG_ITEM)
+            if (archipelago_item_id == REAGENT_BAG_ITEM)
             {
                 foreach (Player player in Main.player)
                 {
-                    player.QuickSpawnItem(null, ModContent.ItemType<PotionBag>(), 1);
+                    player.QuickSpawnItem(null, ModContent.ItemType<Items.ReagentBag>(), 1);
                 }
                 return;
             }
@@ -177,7 +172,7 @@ namespace Archipelago.Items
             {
                 foreach (Player player in Main.player)
                 {
-                    player.QuickSpawnItem(null, ModContent.ItemType<SoulBag>(), 1);
+                    player.QuickSpawnItem(null, ModContent.ItemType<Items.SoulBag>(), 1);
                 }
                 return;
             }
@@ -185,7 +180,7 @@ namespace Archipelago.Items
             {
                 foreach (Player player in Main.player)
                 {
-                    player.QuickSpawnItem(null, ModContent.ItemType<CrateBag>(), 1);
+                    player.QuickSpawnItem(null, ModContent.ItemType<Items.CrateBag>(), 1);
                 }
                 return;
             }
@@ -193,7 +188,7 @@ namespace Archipelago.Items
             {
                 foreach (Player player in Main.player)
                 {
-                    player.QuickSpawnItem(null, ModContent.ItemType<BarBag>(), 1);
+                    player.QuickSpawnItem(null, ModContent.ItemType<Items.BarBag>(), 1);
                 }
                 return;
             }
@@ -201,7 +196,15 @@ namespace Archipelago.Items
             {
                 foreach (Player player in Main.player)
                 {
-                    player.QuickSpawnItem(null, ModContent.ItemType<SpawnerBag>(), 1);
+                    player.QuickSpawnItem(null, ModContent.ItemType<Items.SpawnerBag>(), 1);
+                }
+                return;
+            }
+            if (archipelago_item_id == MOUNT_BAG_ITEM)
+            {
+                foreach (Player player in Main.player)
+                {
+                    player.QuickSpawnItem(null, ModContent.ItemType<Items.MountBag>(), 1);
                 }
                 return;
             }

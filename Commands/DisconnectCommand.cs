@@ -42,7 +42,7 @@ namespace Archipelago.Commands
 			}
 			On.Terraria.Chat.ChatCommandProcessor.ProcessIncomingMessage -= ArchipelagoTerraria.OnTerrariaChatMessage;
 			ArchipelagoTerraria.session.Socket.PacketReceived -= ArchipelagoTerraria.OnPacketReceived;
-			ArchipelagoTerraria.session.Items.ItemReceived -= Items.ItemManager.OnItemReceived;
+			ArchipelagoTerraria.session.Items.ItemReceived -= Managers.ItemManager.OnItemReceived;
 			ArchipelagoTerraria.session.Socket.Disconnect();
 			ArchipelagoTerraria.session = null;
 			Main.NewText("Disconnected from the Archipelago server.");

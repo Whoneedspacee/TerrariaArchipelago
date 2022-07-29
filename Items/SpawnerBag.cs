@@ -11,6 +11,12 @@ namespace Archipelago.Items
 	{
 		public override string Texture => "Terraria/Images/Item_" + ItemID.MoonLordBossBag;
 
+		public static short[] bossItems = {
+			ItemID.SlimeCrown, ItemID.SuspiciousLookingEye, ItemID.WormFood, ItemID.BloodySpine, ItemID.Abeemination, ItemID.ClothierVoodooDoll,
+			ItemID.DeerThing, ItemID.GuideVoodooDoll, ItemID.QueenSlimeCrystal, ItemID.MechanicalEye, ItemID.MechanicalWorm, ItemID.MechanicalSkull,
+			ItemID.LihzahrdPowerCell, ItemID.TruffleWorm, ItemID.EmpressButterfly, ItemID.CelestialSigil,
+		};
+
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Spawner Loot Bag");
@@ -34,7 +40,14 @@ namespace Archipelago.Items
 		public override void RightClick(Player player)
 		{
 			var source = player.GetSource_OpenItem(Type);
-			player.QuickSpawnItem(source, ItemID.PlatinumCoin, 5);
+			player.QuickSpawnItem(source, bossItems[Main.rand.Next(1, bossItems.Length)], 1);
+			player.QuickSpawnItem(source, bossItems[Main.rand.Next(1, bossItems.Length)], 1);
+			player.QuickSpawnItem(source, bossItems[Main.rand.Next(1, bossItems.Length)], 1);
+			player.QuickSpawnItem(source, bossItems[Main.rand.Next(1, bossItems.Length)], 1);
+			player.QuickSpawnItem(source, bossItems[Main.rand.Next(1, bossItems.Length)], 1);
+			player.QuickSpawnItem(source, bossItems[Main.rand.Next(1, bossItems.Length)], 1);
+			player.QuickSpawnItem(source, bossItems[Main.rand.Next(1, bossItems.Length)], 1);
+			player.QuickSpawnItem(source, bossItems[Main.rand.Next(1, bossItems.Length)], 1);
 		}
 
 		public override Color? GetAlpha(Color lightColor)

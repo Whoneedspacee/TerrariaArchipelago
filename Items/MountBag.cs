@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -7,21 +8,22 @@ using Terraria.ModLoader;
 
 namespace Archipelago.Items
 {
-	public class BarBag : ModItem
+	public class MountBag : ModItem
 	{
-		public override string Texture => "Terraria/Images/Item_" + ItemID.GolemBossBag;
+		public override string Texture => "Terraria/Images/Item_" + ItemID.BossBagBetsy;
 
-		public static short[] barItems = {
-			ItemID.CopperBar, ItemID.TinBar, ItemID.IronBar, ItemID.LeadBar, ItemID.SilverBar, ItemID.TungstenBar,
-			ItemID.GoldBar, ItemID.PlatinumBar, ItemID.DemoniteBar, ItemID.CrimtaneBar, ItemID.MeteoriteBar, ItemID.HellstoneBar,
-			ItemID.CobaltBar, ItemID.PalladiumBar, ItemID.MythrilBar, ItemID.OrichalcumBar, ItemID.AdamantiteBar, ItemID.TitaniumBar,
-			ItemID.HallowedBar, ItemID.ChlorophyteBar, ItemID.ShroomiteBar, ItemID.SpectreBar, ItemID.LunarBar,
+		public static short[] mountItems = { 
+			ItemID.SlimySaddle, ItemID.HoneyedGoggles, ItemID.HardySaddle, ItemID.FuzzyCarrot, ItemID.PogoStick,
+			ItemID.GolfCart, ItemID.MolluskWhistle, ItemID.PaintedHorseSaddle, ItemID.MajesticHorseSaddle, ItemID.DarkHorseSaddle,
+			ItemID.SuperheatedBlood, ItemID.AncientHorn, ItemID.BlessedApple, ItemID.ScalyTruffle, ItemID.QueenSlimeMountSaddle,
+			ItemID.ReindeerBells, ItemID.BrainScrambler, ItemID.CosmicCarKey, ItemID.WitchBroom, ItemID.ShrimpyTruffle, ItemID.DrillContainmentUnit,
+			ItemID.DarkMageBookMountItem, ItemID.WallOfFleshGoatMountItem, ItemID.PirateShipMountItem, ItemID.SpookyWoodMountItem, ItemID.SantankMountItem,
 		};
 
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Bar Loot Bag");
-			Tooltip.SetDefault("{$CommonItemTooltip.RightClickToOpen}\nBar Bag");
+			DisplayName.SetDefault("Mount Loot Bag");
+			Tooltip.SetDefault("{$CommonItemTooltip.RightClickToOpen}\nMount Bag");
 		}
 
 		public override void SetDefaults()
@@ -41,9 +43,7 @@ namespace Archipelago.Items
 		public override void RightClick(Player player)
 		{
 			var source = player.GetSource_OpenItem(Type);
-			player.QuickSpawnItem(source, barItems[Main.rand.Next(1, barItems.Length)], 30);
-			player.QuickSpawnItem(source, barItems[Main.rand.Next(1, barItems.Length)], 20);
-			player.QuickSpawnItem(source, barItems[Main.rand.Next(1, barItems.Length)], 10);
+			player.QuickSpawnItem(source, mountItems[Main.rand.Next(1, mountItems.Length)], 1);
 		}
 
 		public override Color? GetAlpha(Color lightColor)

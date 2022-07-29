@@ -17,7 +17,7 @@ using Newtonsoft.Json.Linq;
 using Terraria.Localization;
 using Terraria.Achievements;
 using Archipelago.Items;
-using Archipelago.Achievements;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Archipelago
 {
@@ -42,22 +42,22 @@ namespace Archipelago
 
         public override void PostAddRecipes()
         {
-            ItemManager.PostAddRecipes();
+            Managers.ItemManager.PostAddRecipes();
         }
 
         public static void OnWorldLoaded(On.Terraria.WorldGen.Hooks.orig_WorldLoaded orig)
         {
             orig();
-            Achievements.AchievementManager.Load();
-            ItemManager.Load();
+            Managers.AchievementManager.Load();
+            Managers.ItemManager.Load();
         }
 
         // Disconnect from the server when the player saves and quits
         public static void OnSaveAndQuit(On.Terraria.WorldGen.orig_SaveAndQuit orig, Action callback)
         {
             orig(callback);
-            Achievements.AchievementManager.Unload();
-            ItemManager.Unload();
+            Managers.AchievementManager.Unload();
+            Managers.ItemManager.Unload();
             Commands.DisconnectCommand.Disconnect();
         }
 
@@ -76,8 +76,7 @@ namespace Archipelago
             if (type == ArchipelagoPacketType.Print)
             {
                 PrintPacket received = (PrintPacket)packet;
-                if(!received.Text.Contains("Space:"))
-                    Main.NewText(received.Text);
+                Main.NewText(received.Text);
                 return;
             }
             if (type == ArchipelagoPacketType.RoomUpdate)
@@ -112,7 +111,7 @@ namespace Archipelago
             if (type == ArchipelagoPacketType.Connected)
             {
                 ConnectedPacket received = (ConnectedPacket)packet;
-                Achievements.AchievementManager.CompleteLocationChecks();
+                Managers.AchievementManager.CompleteLocationChecks();
                 return;
             }
             Main.NewText("Recieved Unchecked packet type: " + type);

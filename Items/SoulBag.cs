@@ -11,6 +11,11 @@ namespace Archipelago.Items
 	{
 		public override string Texture => "Terraria/Images/Item_" + ItemID.FairyQueenBossBag;
 
+		public static short[] soulItems = {
+			ItemID.SoulofFlight, ItemID.SoulofLight, ItemID.SoulofNight,
+			ItemID.SoulofMight, ItemID.SoulofSight, ItemID.SoulofFright,
+		};
+
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Soul Loot Bag");
@@ -34,7 +39,9 @@ namespace Archipelago.Items
 		public override void RightClick(Player player)
 		{
 			var source = player.GetSource_OpenItem(Type);
-			player.QuickSpawnItem(source, ItemID.PlatinumCoin, 5);
+			player.QuickSpawnItem(source, ItemID.SoulofLight, 20);
+			player.QuickSpawnItem(source, ItemID.SoulofNight, 20);
+			player.QuickSpawnItem(source, soulItems[Main.rand.Next(1, soulItems.Length)], 20);
 		}
 
 		public override Color? GetAlpha(Color lightColor)
